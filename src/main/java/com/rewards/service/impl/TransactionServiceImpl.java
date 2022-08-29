@@ -18,7 +18,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction saveUpdateTransaction(Transaction transaction) {
-        log.info("saveUpdateTransaction method started Purchase value :: "+transaction.getPurchase());
+        log.info("saveUpdateTransaction method started Purchase value :: "+transaction.getAmount());
         Transaction savedTransaction = transactionRepository.save(transaction);
         log.info("Transaction Saved Successfully transactionId :: "+savedTransaction.getId());
         return savedTransaction;
@@ -44,6 +44,19 @@ public class TransactionServiceImpl implements TransactionService {
         log.info("getTransaction method started transaction id ::"+id);
         Transaction transaction = transactionRepository.findById(id).get();
         log.info("getTransaction method ended");
+        return transaction;
+    }
+
+    @Override
+    public Transaction saveTransaction(Transaction transaction) {
+        Long transactionAmount = transaction.getAmount();
+        if(transactionAmount>=50 && transactionAmount <=100) {
+            transaction.setRewardPoints(transactionAmount+50);
+        } else if(transactionAmount >100) {
+            transaction.setRewardPoints(2*(transactionAmount-100)+50);
+        } else {
+            transaction.setRewardPoints(0L);
+        }
         return transaction;
     }
 }

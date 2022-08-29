@@ -1,5 +1,6 @@
 package com.rewards.controller;
 
+import com.rewards.dto.Response;
 import com.rewards.entity.Transaction;
 import com.rewards.service.TransactionService;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +52,7 @@ public class TransactionController {
         Response response = new Response();
         try {
             if(transaction != null) {
-                transaction = customerTransactionServiceImpl.saveTransaction(transaction);
+                transaction = transactionService.saveTransaction(transaction);
                 response.setObject(transaction);
                 response.setStatus(true);
                 response.setStatusMessage("Transaction saved successfully");
