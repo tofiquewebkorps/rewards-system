@@ -16,5 +16,4 @@ public interface TransactionService {
 
     Transaction getTransaction(Long id);
 
-   Transaction saveTransaction(Transaction transaction);
 }

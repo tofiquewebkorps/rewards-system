@@ -1,6 +1,9 @@
 package com.rewards.service.impl;
 
+import com.rewards.entity.Customer;
 import com.rewards.entity.Transaction;
+import com.rewards.exception.CustomerNotFoundException;
+import com.rewards.repository.CustomerRepository;
 import com.rewards.repository.TransactionRepository;
 import com.rewards.service.TransactionService;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -16,10 +20,24 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    @Autowired
+    private CustomerRepository customerRepository;
+
     @Override
     public Transaction saveUpdateTransaction(Transaction transaction) {
         log.info("saveUpdateTransaction method started Purchase value :: "+transaction.getAmount());
+
+        Customer customer = transaction.getCustomer();
+        if(customer==null){
+            throw new CustomerNotFoundException("Without Customer Transaction would not Happen");
+        }
+        Optional<Customer> existCustomerOptional = customerRepository.findById(customer.getId());
+        if(existCustomerOptional.isEmpty()){
+            throw new CustomerNotFoundException("Customer Not Exist");
+        }
         transaction.setRewardPoints(calculateRewardsPoint(transaction.getAmount()));
+        Customer existCustomer = existCustomerOptional.get();
+        existCustomer.setTotalRewardPoints(existCustomer.getTotalRewardPoints()+transaction.getRewardPoints());
         Transaction savedTransaction = transactionRepository.save(transaction);
         log.info("Transaction Saved Successfully transactionId :: "+savedTransaction.getId());
         return savedTransaction;
@@ -48,19 +66,6 @@ public class TransactionServiceImpl implements TransactionService {
         return transaction;
     }
 
-    @Override
-    public Transaction saveTransaction(Transaction transaction) {
-        Long transactionAmount = transaction.getAmount();
-        if(transactionAmount>=50 && transactionAmount <=100) {
-            transaction.setRewardPoints(transactionAmount+50);
-        } else if(transactionAmount >100) {
-            transaction.setRewardPoints(2*(transactionAmount-100)+50);
-        } else {
-            transaction.setRewardPoints(0L);
-        }
-        return transaction;
-    }
-
     private static Long calculateRewardsPoint(Long amount){
         Long rewardsPoint = 0l;
         amount = amount-50;
@@ -68,7 +73,7 @@ public class TransactionServiceImpl implements TransactionService {
             if(amount/50<1) {
                 rewardsPoint = amount;
             }else{
-                rewardsPoint = 50 + ((amount%50)*2);
+                rewardsPoint = 50 + ((amount-50)*2);
             }
         }
         return rewardsPoint;

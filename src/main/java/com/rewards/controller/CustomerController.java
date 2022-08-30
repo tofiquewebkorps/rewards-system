@@ -1,6 +1,5 @@
 package com.rewards.controller;
 
-import com.rewards.dto.Response;
 import com.rewards.entity.Customer;
 import com.rewards.reponse.ResponseHandler;
 import com.rewards.service.CustomerService;
@@ -18,7 +17,6 @@ public class CustomerController {
     private CustomerService customerService;
     @GetMapping("customers")
     public ResponseEntity<Object> getCustomer(){
-        Response response = new Response();
         List<Customer> customers = customerService.getCustomer();
         return ResponseHandler.generateResponse("",HttpStatus.OK,customers) ;
     }

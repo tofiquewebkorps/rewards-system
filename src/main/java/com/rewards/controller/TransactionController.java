@@ -1,6 +1,5 @@
 package com.rewards.controller;
 
-import com.rewards.dto.Response;
 import com.rewards.entity.Transaction;
 import com.rewards.reponse.ResponseHandler;
 import com.rewards.service.TransactionService;
@@ -38,7 +37,7 @@ public class TransactionController {
         }
      catch (Exception e) {
         e.printStackTrace();
-        return ResponseHandler.generateResponse("Transaction not saved successfully",HttpStatus.UNPROCESSABLE_ENTITY,transaction) ;
+        return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,transaction) ;
     }
     }
 
@@ -52,22 +51,6 @@ public class TransactionController {
     public ResponseEntity<Object> deleteTransaction(@PathVariable Long id){
        transactionService.removeTransaction(id);
         return ResponseHandler.generateResponse("",HttpStatus.OK,null) ;
-    }
-
-    @PostMapping("/transaction")
-    public ResponseEntity<Object> saveCustomerTransaction(@RequestBody Transaction transaction) {
-
-        try {
-
-                transaction = transactionService.saveTransaction(transaction);
-
-                return ResponseHandler.generateResponse("Transaction saved successfully",HttpStatus.OK,transaction) ;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseHandler.generateResponse("Transaction not saved successfully",HttpStatus.UNPROCESSABLE_ENTITY,transaction) ;
-        }
-
     }
 
 }
