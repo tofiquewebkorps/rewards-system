@@ -19,6 +19,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public Transaction saveUpdateTransaction(Transaction transaction) {
         log.info("saveUpdateTransaction method started Purchase value :: "+transaction.getAmount());
+        transaction.setRewardPoints(calculateRewardsPoint(transaction.getAmount()));
         Transaction savedTransaction = transactionRepository.save(transaction);
         log.info("Transaction Saved Successfully transactionId :: "+savedTransaction.getId());
         return savedTransaction;
@@ -58,5 +59,18 @@ public class TransactionServiceImpl implements TransactionService {
             transaction.setRewardPoints(0L);
         }
         return transaction;
+    }
+
+    private static Long calculateRewardsPoint(Long amount){
+        Long rewardsPoint = 0l;
+        amount = amount-50;
+        if(amount>0){
+            if(amount/50<1) {
+                rewardsPoint = amount;
+            }else{
+                rewardsPoint = 50 + ((amount%50)*2);
+            }
+        }
+        return rewardsPoint;
     }
 }

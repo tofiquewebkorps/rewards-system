@@ -2,6 +2,7 @@ package com.rewards.controller;
 
 import com.rewards.dto.Response;
 import com.rewards.entity.Transaction;
+import com.rewards.reponse.ResponseHandler;
 import com.rewards.service.TransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,53 +19,55 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
     @GetMapping("transactions")
-    public ResponseEntity<List<Transaction>> getTransactions(){
+    public ResponseEntity<Object> getTransactions(){
         List<Transaction> transactions = transactionService.getTransactions();
-        return new ResponseEntity<>(transactions, HttpStatus.OK);
+        return ResponseHandler.generateResponse("",HttpStatus.OK,transactions) ;
     }
 
     @GetMapping("transactions/{id}")
-    public ResponseEntity<Transaction> getTransaction(@PathVariable Long id){
+    public ResponseEntity<Object> getTransaction(@PathVariable Long id){
         Transaction transaction = transactionService.getTransaction(id);
-        return new ResponseEntity<>(transaction,HttpStatus.OK);
+        return ResponseHandler.generateResponse("",HttpStatus.OK,transaction) ;
     }
 
     @PostMapping("transactions")
-    public ResponseEntity<Transaction> addTransaction(@RequestBody Transaction transaction){
-        Transaction savedTransaction = transactionService.saveUpdateTransaction(transaction);
-        return new ResponseEntity<>(savedTransaction,HttpStatus.OK);
+    public ResponseEntity<Object> addTransaction(@RequestBody Transaction transaction){
+        try {
+            Transaction savedTransaction = transactionService.saveUpdateTransaction(transaction);
+            return ResponseHandler.generateResponse("", HttpStatus.OK, savedTransaction);
+        }
+     catch (Exception e) {
+        e.printStackTrace();
+        return ResponseHandler.generateResponse("Transaction not saved successfully",HttpStatus.UNPROCESSABLE_ENTITY,transaction) ;
+    }
     }
 
     @PutMapping("transactions")
-    public ResponseEntity<Transaction> updateTransaction(@RequestBody Transaction transaction){
-        Transaction savedTransaction = transactionService.saveUpdateTransaction(transaction);
-        return new ResponseEntity<>(savedTransaction,HttpStatus.OK);
+    public ResponseEntity<Object> updateTransaction(@RequestBody Transaction transaction){
+        Transaction updateTransaction = transactionService.saveUpdateTransaction(transaction);
+        return ResponseHandler.generateResponse("",HttpStatus.OK,updateTransaction) ;
     }
 
     @DeleteMapping("transactions/{id}")
-    public ResponseEntity deleteTransaction(@PathVariable Long id){
+    public ResponseEntity<Object> deleteTransaction(@PathVariable Long id){
        transactionService.removeTransaction(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseHandler.generateResponse("",HttpStatus.OK,null) ;
     }
 
     @PostMapping("/transaction")
-    public ResponseEntity<Response> saveCustomerTransaction(@RequestBody Transaction transaction) {
-        Response response = new Response();
+    public ResponseEntity<Object> saveCustomerTransaction(@RequestBody Transaction transaction) {
+
         try {
-            if(transaction != null) {
+
                 transaction = transactionService.saveTransaction(transaction);
-                response.setObject(transaction);
-                response.setStatus(true);
-                response.setStatusMessage("Transaction saved successfully");
-            } else {
-                response.setObject(transaction);
-                response.setStatus(false);
-                response.setStatusMessage("Transaction not saved successfully");
-            }
+
+                return ResponseHandler.generateResponse("Transaction saved successfully",HttpStatus.OK,transaction) ;
+
         } catch (Exception e) {
             e.printStackTrace();
+            return ResponseHandler.generateResponse("Transaction not saved successfully",HttpStatus.UNPROCESSABLE_ENTITY,transaction) ;
         }
-        return ResponseEntity.ok(response);
+
     }
 
 }

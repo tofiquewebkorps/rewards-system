@@ -1,9 +1,9 @@
 package com.rewards.controller;
 
+import com.rewards.dto.Response;
 import com.rewards.entity.Customer;
-import com.rewards.entity.Transaction;
+import com.rewards.reponse.ResponseHandler;
 import com.rewards.service.CustomerService;
-import com.rewards.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,32 +17,33 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
     @GetMapping("customers")
-    public ResponseEntity<List<Customer>> getCustomer(){
-        List<Customer> customer = customerService.getCustomer();
-        return new ResponseEntity<>(customer, HttpStatus.OK);
+    public ResponseEntity<Object> getCustomer(){
+        Response response = new Response();
+        List<Customer> customers = customerService.getCustomer();
+        return ResponseHandler.generateResponse("",HttpStatus.OK,customers) ;
     }
 
     @GetMapping("customers/{id}")
-    public ResponseEntity<Customer> getCustomer(@PathVariable Long id){
-        Customer transaction = customerService.getCustomer(id);
-        return new ResponseEntity<>(transaction,HttpStatus.OK);
+    public ResponseEntity<Object> getCustomer(@PathVariable Long id){
+        Customer customer = customerService.getCustomer(id);
+        return ResponseHandler.generateResponse("",HttpStatus.OK,customer) ;
     }
 
     @PostMapping("customers")
-    public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer){
-        Customer savedTransaction = customerService.saveUpdateCustomer(customer);
-        return new ResponseEntity<>(savedTransaction,HttpStatus.OK);
+    public ResponseEntity<Object> addCustomer(@RequestBody Customer customer){
+        Customer savedCustomer = customerService.saveUpdateCustomer(customer);
+        return ResponseHandler.generateResponse("",HttpStatus.OK,savedCustomer) ;
     }
 
     @PutMapping("customers")
-    public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer){
-        Customer savedTransaction = customerService.saveUpdateCustomer(customer);
-        return new ResponseEntity<>(savedTransaction,HttpStatus.OK);
+    public ResponseEntity<Object> updateCustomer(@RequestBody Customer customer){
+        Customer updateCustomer = customerService.saveUpdateCustomer(customer);
+        return ResponseHandler.generateResponse("",HttpStatus.OK,updateCustomer) ;
     }
 
     @DeleteMapping("customers/{id}")
-    public ResponseEntity deleteCustomer(@PathVariable Long id){
+    public ResponseEntity<Object> deleteCustomer(@PathVariable Long id){
         customerService.removeCustomer(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseHandler.generateResponse("",HttpStatus.OK,null) ;
     }
 }
