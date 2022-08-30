@@ -19,6 +19,6 @@ public class Customer {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Transaction> transactions;
 
-    private Long totalRewardPoints;
+    private Long totalRewardPoints = 0l;
 
 }

@@ -14,7 +14,7 @@ public class Transaction {
     private Long id;
     private Long amount;
     private Long rewardPoints;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Customer customer;
     private LocalDate date;
 }

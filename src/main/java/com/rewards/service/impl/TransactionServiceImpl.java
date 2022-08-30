@@ -36,9 +36,11 @@ public class TransactionServiceImpl implements TransactionService {
             throw new CustomerNotFoundException("Customer Not Exist");
         }
         transaction.setRewardPoints(calculateRewardsPoint(transaction.getAmount()));
+        Transaction savedTransaction = transactionRepository.save(transaction);
         Customer existCustomer = existCustomerOptional.get();
         existCustomer.setTotalRewardPoints(existCustomer.getTotalRewardPoints()+transaction.getRewardPoints());
-        Transaction savedTransaction = transactionRepository.save(transaction);
+        Customer updateCustomer = customerRepository.save(existCustomer);
+        savedTransaction.setCustomer(updateCustomer);
         log.info("Transaction Saved Successfully transactionId :: "+savedTransaction.getId());
         return savedTransaction;
     }
