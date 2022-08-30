@@ -19,38 +19,58 @@ public class TransactionController {
     private TransactionService transactionService;
     @GetMapping("transactions")
     public ResponseEntity<Object> getTransactions(){
-        List<Transaction> transactions = transactionService.getTransactions();
-        return ResponseHandler.generateResponse("",HttpStatus.OK,transactions) ;
+        try {
+            List<Transaction> transactions = transactionService.getTransactions();
+            return ResponseHandler.generateResponse("", HttpStatus.OK, transactions);
+        }catch (Exception e) {
+            log.error("Exception occured in getTransactions ::"+ e.getMessage());
+            return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,null) ;
+        }
     }
 
     @GetMapping("transactions/{id}")
     public ResponseEntity<Object> getTransaction(@PathVariable Long id){
-        Transaction transaction = transactionService.getTransaction(id);
-        return ResponseHandler.generateResponse("",HttpStatus.OK,transaction) ;
+        try {
+            Transaction transaction = transactionService.getTransaction(id);
+            return ResponseHandler.generateResponse("", HttpStatus.OK, transaction);
+        }catch (Exception e) {
+            log.error("Exception occured in getTransaction ::"+ e.getMessage());
+            return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,id) ;
+        }
     }
 
     @PostMapping("transactions")
     public ResponseEntity<Object> addTransaction(@RequestBody Transaction transaction){
         try {
             Transaction savedTransaction = transactionService.saveUpdateTransaction(transaction);
-            return ResponseHandler.generateResponse("", HttpStatus.OK, savedTransaction);
+            return ResponseHandler.generateResponse("Transaction Done Successfully", HttpStatus.OK, savedTransaction);
         }
      catch (Exception e) {
-        e.printStackTrace();
+         log.error("Exception occured in addTransaction ::"+ e.getMessage());
         return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,transaction) ;
     }
     }
 
     @PutMapping("transactions")
     public ResponseEntity<Object> updateTransaction(@RequestBody Transaction transaction){
-        Transaction updateTransaction = transactionService.saveUpdateTransaction(transaction);
-        return ResponseHandler.generateResponse("",HttpStatus.OK,updateTransaction) ;
+        try {
+            Transaction updateTransaction = transactionService.saveUpdateTransaction(transaction);
+            return ResponseHandler.generateResponse("", HttpStatus.OK, updateTransaction);
+        }catch (Exception e) {
+            log.error("Exception occured in updateTransaction ::"+ e.getMessage());
+            return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,transaction) ;
+        }
     }
 
     @DeleteMapping("transactions/{id}")
     public ResponseEntity<Object> deleteTransaction(@PathVariable Long id){
-       transactionService.removeTransaction(id);
-        return ResponseHandler.generateResponse("",HttpStatus.OK,null) ;
+        try {
+            transactionService.removeTransaction(id);
+            return ResponseHandler.generateResponse("", HttpStatus.OK, null);
+        }catch (Exception e) {
+            log.error("Exception occured in deleteTransaction ::"+ e.getMessage());
+            return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR,null) ;
+        }
     }
 
 }

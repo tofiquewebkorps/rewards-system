@@ -10,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,7 +71,28 @@ public class TransactionServiceImpl implements TransactionService {
         return transaction;
     }
 
+    @Override
+    public List<Transaction> getTransactionsByMonths(Month month) {
+        log.info("getTransactionsByMonths method started MONTH ::"+month);
+        LocalDate startDate = LocalDate.of(2022, month,1);
+        LocalDate endDate = LocalDate.of(2022,month, startDate.withDayOfMonth(
+                startDate.getMonth().length(startDate.isLeapYear())).getDayOfMonth());
+        List<Transaction> transactions = (List<Transaction>) transactionRepository.findAllByDateBetween(startDate,endDate);
+        log.info("getTransactionsByMonths method completed total transactions :: "+transactions.size());
+        return transactions;
+    }
+
+    public Long totalRewardsPointInMonth(List<Transaction> transactions){
+        Long totalReward = 0l;
+        for(Transaction transaction : transactions){
+            totalReward = totalReward + transaction.getRewardPoints();
+        }
+        System.out.println("totalReward = " + totalReward);
+        return totalReward;
+    }
+
     private static Long calculateRewardsPoint(Long amount){
+        log.info("calculateRewardsPoint method started purchase amount ::"+amount);
         Long rewardsPoint = 0l;
         amount = amount-50;
         if(amount>0){
@@ -78,6 +102,7 @@ public class TransactionServiceImpl implements TransactionService {
                 rewardsPoint = 50 + ((amount-50)*2);
             }
         }
+        log.info("calculateRewardsPoint method ended reward point ::"+rewardsPoint);
         return rewardsPoint;
     }
 }
