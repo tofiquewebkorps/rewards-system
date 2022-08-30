@@ -83,11 +83,12 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     public Long totalRewardsPointInMonth(List<Transaction> transactions){
+        log.info("totalRewardsPointInMonth method started total transactions :: "+transactions.size());
         Long totalReward = 0l;
         for(Transaction transaction : transactions){
             totalReward = totalReward + transaction.getRewardPoints();
         }
-        System.out.println("totalReward = " + totalReward);
+        log.info("totalRewardsPointInMonth method ended total Reward :: "+totalReward);
         return totalReward;
     }
 

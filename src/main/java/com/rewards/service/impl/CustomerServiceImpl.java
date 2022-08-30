@@ -1,6 +1,7 @@
 package com.rewards.service.impl;
 
 import com.rewards.entity.Customer;
+import com.rewards.exception.CustomerNotFoundException;
 import com.rewards.repository.CustomerRepository;
 import com.rewards.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -25,8 +27,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> getCustomer() {
+    public List<Customer> getCustomers() {
         log.info("getCustomer method started.");
+
         List<Customer> customers = (List<Customer>) customerRepository.findAll();
         log.info("getCustomer method completed total customers :: "+customers.size());
         return customers;
@@ -42,6 +45,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer getCustomer(Long id) {
         log.info("getTransaction method started transaction id ::"+id);
+        Optional<Customer> customerOptional = customerRepository.findById(id);
+        if(customerOptional.isEmpty()){
+            log.info("getCustomer Customer not found with id ::"+id);
+            throw new CustomerNotFoundException("Customer not found with id ::"+id);
+        }
         Customer customer = customerRepository.findById(id).get();
         log.info("getTransaction method ended");
         return customer;

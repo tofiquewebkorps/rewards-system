@@ -7,6 +7,7 @@ import com.rewards.exception.CustomerNotFoundException;
 import com.rewards.reponse.ResponseHandler;
 import com.rewards.repository.CustomerRepository;
 import com.rewards.repository.TransactionRepository;
+import com.rewards.service.RewardsService;
 import com.rewards.service.TransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,26 +28,12 @@ import java.util.Optional;
 public class RewardsController {
 
     @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private TransactionService transactionService;
+    private RewardsService rewardsService;
 
     @GetMapping("rewards/{id}")
     public ResponseEntity<Object> getRewardsDetails(@PathVariable Long id){
-        Optional<Customer> customerOptional = customerRepository.findById(id);
-        if(customerOptional.isEmpty()){
-            log.info("getRewardsDetails Customer not found with id ::"+id);
-            throw new CustomerNotFoundException("Customer not found with id ::"+id);
-        }
-        Customer customer = customerOptional.get();
-        RewardsDto rewardsDto = new RewardsDto();
-        rewardsDto.setCustomerName(customer.getName());
-        rewardsDto.setTotalRewardsPoints(customer.getTotalRewardPoints());
 
-        List<Transaction> transactions =  transactionService.getTransactionsByMonths(Month.JULY);
-        Long monthPoint = transactionService.totalRewardsPointInMonth(transactions);
-        return ResponseHandler.generateResponse("success", HttpStatus.OK,monthPoint);
+        return ResponseHandler.generateResponse("success", HttpStatus.OK,rewardsService.getRewardsMonthWise(id));
     }
 
 

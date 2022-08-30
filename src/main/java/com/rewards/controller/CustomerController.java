@@ -20,7 +20,7 @@ public class CustomerController {
     @GetMapping("customers")
     public ResponseEntity<Object> getCustomer(){
         try {
-            List<Customer> customers = customerService.getCustomer();
+            List<Customer> customers = customerService.getCustomers();
             return ResponseHandler.generateResponse("", HttpStatus.OK, customers);
         }catch (Exception e) {
             log.error("Exception occured in getCustomer ::"+ e.getMessage());
