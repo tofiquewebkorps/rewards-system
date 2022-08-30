@@ -14,7 +14,16 @@ public class Transaction {
     private Long id;
     private Long amount;
     private Long rewardPoints;
-    @ManyToOne
+    @ManyToOne(targetEntity = Customer.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinColumn(name = "customerId", referencedColumnName = "id")
     private Customer customer;
-    private LocalDate date;
+    private String date;
+	public Transaction(Long amount, Long rewardPoints, String string) {
+		super();
+		this.amount = amount;
+		this.rewardPoints = rewardPoints;
+		this.date = string;
+	}
+    
+    
 }

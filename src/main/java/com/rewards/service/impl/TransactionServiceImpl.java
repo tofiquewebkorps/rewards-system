@@ -92,7 +92,7 @@ public class TransactionServiceImpl implements TransactionService {
         return totalReward;
     }
 
-    private static Long calculateRewardsPoint(Long amount){
+    protected  Long calculateRewardsPoint(Long amount){
         log.info("calculateRewardsPoint method started purchase amount ::"+amount);
         Long rewardsPoint = 0l;
         amount = amount-50;
