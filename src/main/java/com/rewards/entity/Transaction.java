@@ -1,11 +1,23 @@
 package com.rewards.entity;
 
-import lombok.Data;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
-import javax.persistence.*;
-import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Data
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@ToString
 @Entity
 public class Transaction {
 
@@ -16,6 +28,7 @@ public class Transaction {
     private Long rewardPoints;
     @ManyToOne(targetEntity = Customer.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //    @JoinColumn(name = "customerId", referencedColumnName = "id")
+    @JsonIgnore
     private Customer customer;
     private String date;
 	public Transaction(Long amount, Long rewardPoints, String string) {
