@@ -39,7 +39,7 @@ public class RewardsServiceImpl implements RewardsService {
         for(Month month:Month.values()) {
             List<TransactionDTO> transactionDTOS = customerDTO.getTransactions();
             Long monthPoint = transactionService.totalRewardsPointInMonth(transactionService.getTransactionsByCustomerAndMonths(customerDTO,month));
-            if(monthPoint!=null){
+            if(monthPoint>0){
                 map.put(month.name(),monthPoint);
             }
         }
