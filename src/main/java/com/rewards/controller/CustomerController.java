@@ -1,5 +1,6 @@
 package com.rewards.controller;
 
+import com.rewards.dto.CustomerDTO;
 import com.rewards.entity.Customer;
 import com.rewards.reponse.ResponseHandler;
 import com.rewards.service.CustomerService;
@@ -20,7 +21,7 @@ public class CustomerController {
     @GetMapping("customers")
     public ResponseEntity<Object> getCustomer(){
         try {
-            List<Customer> customers = customerService.getCustomers();
+            List<CustomerDTO> customers = customerService.getCustomers();
             return ResponseHandler.generateResponse("", HttpStatus.OK, customers);
         }catch (Exception e) {
             log.error("Exception occured in getCustomer ::"+ e.getMessage());
@@ -31,8 +32,8 @@ public class CustomerController {
     @GetMapping("customers/{id}")
     public ResponseEntity<Object> getCustomer(@PathVariable Long id){
         try {
-            Customer customer = customerService.getCustomer(id);
-            return ResponseHandler.generateResponse("", HttpStatus.OK, customer);
+            CustomerDTO customerDTO = customerService.getCustomer(id);
+            return ResponseHandler.generateResponse("", HttpStatus.OK, customerDTO);
         }catch (Exception e) {
             log.error("Exception occured in getCustomer ::"+ e.getMessage());
             return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,null) ;
@@ -40,10 +41,10 @@ public class CustomerController {
     }
 
     @PostMapping("customers")
-    public ResponseEntity<Object> addCustomer(@RequestBody Customer customer){
+    public ResponseEntity<Object> addCustomer(@RequestBody CustomerDTO customerDTO){
         try {
-            Customer savedCustomer = customerService.saveUpdateCustomer(customer);
-            return ResponseHandler.generateResponse("", HttpStatus.OK, savedCustomer);
+            CustomerDTO savedCustomerDTO = customerService.saveUpdateCustomer(customerDTO);
+            return ResponseHandler.generateResponse("", HttpStatus.OK, savedCustomerDTO);
         }catch (Exception e) {
             log.error("Exception occured in addCustomer ::"+ e.getMessage());
             return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,null) ;
@@ -51,9 +52,9 @@ public class CustomerController {
     }
 
     @PutMapping("customers")
-    public ResponseEntity<Object> updateCustomer(@RequestBody Customer customer){
+    public ResponseEntity<Object> updateCustomer(@RequestBody CustomerDTO customerDTO){
         try {
-            Customer updateCustomer = customerService.saveUpdateCustomer(customer);
+            CustomerDTO updateCustomer = customerService.saveUpdateCustomer(customerDTO);
             return ResponseHandler.generateResponse("", HttpStatus.OK, updateCustomer);
         }catch (Exception e) {
             log.error("Exception occured in updateCustomer ::"+ e.getMessage());

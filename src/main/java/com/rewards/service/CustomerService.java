@@ -1,15 +1,20 @@
 package com.rewards.service;
 
+import com.rewards.dto.CustomerDTO;
+import com.rewards.dto.TransactionDTO;
 import com.rewards.entity.Customer;
 
+import java.time.Month;
 import java.util.List;
 
 public interface CustomerService{
-    Customer saveUpdateCustomer(Customer customer);
+    CustomerDTO saveUpdateCustomer(CustomerDTO customerDTO);
 
-    List<Customer> getCustomers();
+    List<CustomerDTO> getCustomers();
 
     void removeCustomer(Long id);
 
-    Customer getCustomer(Long id);
+    CustomerDTO getCustomer(Long id);
+
+
 }

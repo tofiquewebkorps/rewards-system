@@ -1,22 +1,28 @@
 package com.rewards.entity;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 
 @Entity
-@Data
+@Getter
+@Setter
+@Table(name = "customers")
 public class Customer {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long cid;
 
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Transaction.class,cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "CUSTOMER_ID",referencedColumnName = "CID")
     private Set<Transaction> transactions;
 
     private Long totalRewardPoints = 0l;

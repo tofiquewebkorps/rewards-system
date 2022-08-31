@@ -7,6 +7,7 @@ import com.rewards.exception.CustomerNotFoundException;
 import com.rewards.reponse.ResponseHandler;
 import com.rewards.repository.CustomerRepository;
 import com.rewards.repository.TransactionRepository;
+
 import com.rewards.service.RewardsService;
 import com.rewards.service.TransactionService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ import java.util.Optional;
 
 @RestController
 @Slf4j
-public class RewardsController {
+public class  RewardsController {
 
     @Autowired
     private RewardsService rewardsService;

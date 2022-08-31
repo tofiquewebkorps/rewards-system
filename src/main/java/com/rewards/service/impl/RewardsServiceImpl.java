@@ -1,6 +1,8 @@
 package com.rewards.service.impl;
 
+import com.rewards.dto.CustomerDTO;
 import com.rewards.dto.RewardsDto;
+import com.rewards.dto.TransactionDTO;
 import com.rewards.entity.Customer;
 import com.rewards.entity.Transaction;
 import com.rewards.exception.CustomerNotFoundException;
@@ -15,25 +17,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 public class RewardsServiceImpl implements RewardsService {
+
     @Autowired
     private TransactionService transactionService;
-
     @Autowired
     private CustomerService customerService;
 
     @Override
     public RewardsDto getRewardsMonthWise(Long id) {
         HashMap<String,Long> map= new HashMap<>();
-        Customer customer = customerService.getCustomer(id);
+        CustomerDTO customerDTO = customerService.getCustomer(id);
         RewardsDto rewardsDto = new RewardsDto();
-        rewardsDto.setCustomerName(customer.getName());
-        rewardsDto.setTotalRewardsPoints(customer.getTotalRewardPoints());
+        rewardsDto.setCustomerName(customerDTO.getName());
+        rewardsDto.setTotalRewardsPoints(customerDTO.getTotalRewardPoints());
+
+
         for(Month month:Month.values()) {
-            List<Transaction> transactions = transactionService.getTransactionsByMonths(month);
-            Long monthPoint = transactionService.totalRewardsPointInMonth(transactions);
-            if(monthPoint!=0){
+            List<TransactionDTO> transactionDTOS = customerDTO.getTransactions();
+            Long monthPoint = transactionService.totalRewardsPointInMonth(transactionService.getTransactionsByCustomerAndMonths(customerDTO,month));
+            if(monthPoint!=null){
                 map.put(month.name(),monthPoint);
             }
         }

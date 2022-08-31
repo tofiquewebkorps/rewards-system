@@ -1,5 +1,7 @@
 package com.rewards.controller;
 
+import com.rewards.dto.TransactionDTO;
+import com.rewards.entity.Customer;
 import com.rewards.entity.Transaction;
 import com.rewards.reponse.ResponseHandler;
 import com.rewards.service.TransactionService;
@@ -20,8 +22,8 @@ public class TransactionController {
     @GetMapping("transactions")
     public ResponseEntity<Object> getTransactions(){
         try {
-            List<Transaction> transactions = transactionService.getTransactions();
-            return ResponseHandler.generateResponse("", HttpStatus.OK, transactions);
+            List<TransactionDTO> transactionDTOS= transactionService.getTransactions();
+            return ResponseHandler.generateResponse("", HttpStatus.OK, transactionDTOS);
         }catch (Exception e) {
             log.error("Exception occured in getTransactions ::"+ e.getMessage());
             return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,null) ;
@@ -31,8 +33,8 @@ public class TransactionController {
     @GetMapping("transactions/{id}")
     public ResponseEntity<Object> getTransaction(@PathVariable Long id){
         try {
-            Transaction transaction = transactionService.getTransaction(id);
-            return ResponseHandler.generateResponse("", HttpStatus.OK, transaction);
+            TransactionDTO transactionDTO = transactionService.getTransaction(id);
+            return ResponseHandler.generateResponse("", HttpStatus.OK, transactionDTO);
         }catch (Exception e) {
             log.error("Exception occured in getTransaction ::"+ e.getMessage());
             return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,id) ;
@@ -40,25 +42,25 @@ public class TransactionController {
     }
 
     @PostMapping("transactions")
-    public ResponseEntity<Object> addTransaction(@RequestBody Transaction transaction){
+    public ResponseEntity<Object> addTransaction(@RequestBody TransactionDTO transactionDTO){
         try {
-            Transaction savedTransaction = transactionService.saveUpdateTransaction(transaction);
-            return ResponseHandler.generateResponse("Transaction Done Successfully", HttpStatus.OK, savedTransaction);
+            TransactionDTO savedTransactionDTO = transactionService.saveUpdateTransaction(transactionDTO);
+            return ResponseHandler.generateResponse("Transaction Done Successfully", HttpStatus.OK, savedTransactionDTO);
         }
      catch (Exception e) {
          log.error("Exception occured in addTransaction ::"+ e.getMessage());
-        return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,transaction) ;
+        return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,transactionDTO) ;
     }
     }
 
     @PutMapping("transactions")
-    public ResponseEntity<Object> updateTransaction(@RequestBody Transaction transaction){
+    public ResponseEntity<Object> updateTransaction(@RequestBody TransactionDTO transactionDTO){
         try {
-            Transaction updateTransaction = transactionService.saveUpdateTransaction(transaction);
-            return ResponseHandler.generateResponse("", HttpStatus.OK, updateTransaction);
+            TransactionDTO savedTransactionDTO = transactionService.saveUpdateTransaction(transactionDTO);
+            return ResponseHandler.generateResponse("", HttpStatus.OK, savedTransactionDTO);
         }catch (Exception e) {
             log.error("Exception occured in updateTransaction ::"+ e.getMessage());
-            return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,transaction) ;
+            return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,transactionDTO) ;
         }
     }
 

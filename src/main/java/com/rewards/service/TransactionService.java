@@ -1,5 +1,8 @@
 package com.rewards.service;
 
+import com.rewards.dto.CustomerDTO;
+import com.rewards.dto.TransactionDTO;
+import com.rewards.entity.Customer;
 import com.rewards.entity.Transaction;
 
 
@@ -10,15 +13,16 @@ import java.util.List;
 
 public interface TransactionService {
 
-    Transaction saveUpdateTransaction(Transaction transaction);
+    TransactionDTO saveUpdateTransaction(TransactionDTO transactionDTO);
 
-    List<Transaction> getTransactions();
+    List<TransactionDTO> getTransactions();
 
     void removeTransaction(Long id);
 
-    Transaction getTransaction(Long id);
+    TransactionDTO getTransaction(Long id);
 
-    List<Transaction> getTransactionsByMonths(Month month);
 
-    Long totalRewardsPointInMonth(List<Transaction> transactions);
+    Long totalRewardsPointInMonth(List<TransactionDTO> transactionDTOS);
+
+    List<TransactionDTO> getTransactionsByCustomerAndMonths(CustomerDTO customerDTO, Month month);
 }
