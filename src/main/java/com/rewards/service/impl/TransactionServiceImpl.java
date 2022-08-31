@@ -5,6 +5,7 @@ import com.rewards.dto.TransactionDTO;
 import com.rewards.entity.Customer;
 import com.rewards.entity.Transaction;
 import com.rewards.exception.CustomerNotFoundException;
+import com.rewards.exception.TransactionNotFoundException;
 import com.rewards.repository.CustomerRepository;
 import com.rewards.repository.TransactionRepository;
 import com.rewards.service.TransactionService;
@@ -68,6 +69,9 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void removeTransaction(Long id) {
         log.info("removeTransaction method started transaction id ::"+id);
+        TransactionDTO transactionDTO = getTransaction(id);
+        CustomerDTO customerDTO= transactionDTO.getCustomerDTO();
+        customerDTO.setTotalRewardPoints(customerDTO.getTotalRewardPoints()-transactionDTO.getRewardPoints());
         transactionRepository.deleteById(id);
         log.info("removeTransaction method ended");
     }
@@ -75,8 +79,12 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public TransactionDTO getTransaction(Long id) {
         log.info("getTransaction method started transaction id ::"+id);
-        Transaction transaction = transactionRepository.findById(id).get();
-        TransactionDTO transactionDTO = modelMapper.map(transaction,TransactionDTO.class);
+        Optional<Transaction> transactionOptional = transactionRepository.findById(id);
+        if(transactionOptional.isEmpty()){
+            log.error("getTransaction Transaction Not Found with id ::"+id);
+            throw new TransactionNotFoundException("Invalid Transaction ID ::"+id);
+        }
+        TransactionDTO transactionDTO = modelMapper.map(transactionOptional.get(),TransactionDTO.class);
         log.info("getTransaction method ended");
         return transactionDTO;
     }

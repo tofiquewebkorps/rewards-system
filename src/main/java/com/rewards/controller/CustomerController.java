@@ -18,32 +18,36 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
     @GetMapping("customers")
-    public ResponseEntity<Object> getCustomer(){
+    public ResponseEntity<Object> getCustomers(){
+        log.info("getCustomers started");
         try {
             List<CustomerDTO> customers = customerService.getCustomers();
-            return ResponseHandler.generateResponse("", HttpStatus.OK, customers);
+            log.info("getCustomers customers list size ::"+customers.size());
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, customers);
         }catch (Exception e) {
             log.error("Exception occured in getCustomer ::"+ e.getMessage());
-            return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,null) ;
+            return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR,null) ;
         }
     }
 
     @GetMapping("customers/{id}")
     public ResponseEntity<Object> getCustomer(@PathVariable Long id){
+        log.info("getCustomer started id ::"+id);
         try {
             CustomerDTO customerDTO = customerService.getCustomer(id);
-            return ResponseHandler.generateResponse("", HttpStatus.OK, customerDTO);
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, customerDTO);
         }catch (Exception e) {
             log.error("Exception occured in getCustomer ::"+ e.getMessage());
-            return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,null) ;
+            return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR,null) ;
         }
     }
 
     @PostMapping("customers")
     public ResponseEntity<Object> addCustomer(@RequestBody CustomerDTO customerDTO){
+        log.info("addCustomer started");
         try {
             CustomerDTO savedCustomerDTO = customerService.saveUpdateCustomer(customerDTO);
-            return ResponseHandler.generateResponse("", HttpStatus.OK, savedCustomerDTO);
+            return ResponseHandler.generateResponse("Customer Signup Done", HttpStatus.OK, savedCustomerDTO);
         }catch (Exception e) {
             log.error("Exception occured in addCustomer ::"+ e.getMessage());
             return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,null) ;
@@ -52,6 +56,7 @@ public class CustomerController {
 
     @PutMapping("customers")
     public ResponseEntity<Object> updateCustomer(@RequestBody CustomerDTO customerDTO){
+        log.info("updateCustomer started customer id ::"+customerDTO.getCid());
         try {
             CustomerDTO updateCustomer = customerService.saveUpdateCustomer(customerDTO);
             return ResponseHandler.generateResponse("", HttpStatus.OK, updateCustomer);
@@ -63,9 +68,10 @@ public class CustomerController {
 
     @DeleteMapping("customers/{id}")
     public ResponseEntity<Object> deleteCustomer(@PathVariable Long id){
+        log.info("deleteCustomer started customer id ::"+id);
         try {
             customerService.removeCustomer(id);
-            return ResponseHandler.generateResponse("", HttpStatus.OK, null);
+            return ResponseHandler.generateResponse("Customer Deleted Successfully", HttpStatus.OK, null);
         }catch (Exception e) {
             log.error("Exception occured in deleteCustomer ::"+ e.getMessage());
             return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR,null) ;

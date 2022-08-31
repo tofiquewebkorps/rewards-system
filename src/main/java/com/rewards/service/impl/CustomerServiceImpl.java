@@ -55,7 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
         log.info("getTransaction method started transaction id ::"+id);
         Optional<Customer> customerOptional = customerRepository.findById(id);
         if(customerOptional.isEmpty()){
-            log.info("getCustomer Customer not found with id ::"+id);
+            log.error("getCustomer Customer not found with id ::"+id);
             throw new CustomerNotFoundException("Customer not found with id ::"+id);
         }
         Customer customer = customerRepository.findById(id).get();

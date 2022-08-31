@@ -19,30 +19,36 @@ public class TransactionController {
     private TransactionService transactionService;
     @GetMapping("transactions")
     public ResponseEntity<Object> getTransactions(){
+        log.info("getTransactions started");
         try {
             List<TransactionDTO> transactionDTOS= transactionService.getTransactions();
-            return ResponseHandler.generateResponse("", HttpStatus.OK, transactionDTOS);
+            log.info("getTransactions total transactions ::"+transactionDTOS.size());
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, transactionDTOS);
         }catch (Exception e) {
             log.error("Exception occured in getTransactions ::"+ e.getMessage());
-            return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,null) ;
+            return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR,null) ;
         }
     }
 
     @GetMapping("transactions/{id}")
     public ResponseEntity<Object> getTransaction(@PathVariable Long id){
+        log.info("getTransaction started");
         try {
             TransactionDTO transactionDTO = transactionService.getTransaction(id);
-            return ResponseHandler.generateResponse("", HttpStatus.OK, transactionDTO);
+            log.info("getTransactions transaction get successfully");
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, transactionDTO);
         }catch (Exception e) {
             log.error("Exception occured in getTransaction ::"+ e.getMessage());
-            return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,id) ;
+            return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR,id) ;
         }
     }
 
     @PostMapping("transactions")
     public ResponseEntity<Object> addTransaction(@RequestBody TransactionDTO transactionDTO){
+        log.info("addTransaction started");
         try {
             TransactionDTO savedTransactionDTO = transactionService.saveUpdateTransaction(transactionDTO);
+            log.info("addTransaction Transaction Done Successfully");
             return ResponseHandler.generateResponse("Transaction Done Successfully", HttpStatus.OK, savedTransactionDTO);
         }
      catch (Exception e) {
@@ -53,9 +59,11 @@ public class TransactionController {
 
     @PutMapping("transactions")
     public ResponseEntity<Object> updateTransaction(@RequestBody TransactionDTO transactionDTO){
+        log.info("updateTransaction started transaction id ::"+transactionDTO.getTid());
         try {
             TransactionDTO savedTransactionDTO = transactionService.saveUpdateTransaction(transactionDTO);
-            return ResponseHandler.generateResponse("", HttpStatus.OK, savedTransactionDTO);
+            log.info("updateTransaction transaction updated successfully on id ::"+transactionDTO.getTid());
+            return ResponseHandler.generateResponse("Transaction Updated Successfully", HttpStatus.OK, savedTransactionDTO);
         }catch (Exception e) {
             log.error("Exception occured in updateTransaction ::"+ e.getMessage());
             return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY,transactionDTO) ;
@@ -64,9 +72,11 @@ public class TransactionController {
 
     @DeleteMapping("transactions/{id}")
     public ResponseEntity<Object> deleteTransaction(@PathVariable Long id){
+        log.info("deleteTransaction started transaction id ::"+id);
         try {
             transactionService.removeTransaction(id);
-            return ResponseHandler.generateResponse("", HttpStatus.OK, null);
+            log.info("deleteTransaction transaction deleted successfully with id ::"+id);
+            return ResponseHandler.generateResponse("Transaction Deleted Successfully", HttpStatus.OK, null);
         }catch (Exception e) {
             log.error("Exception occured in deleteTransaction ::"+ e.getMessage());
             return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR,null) ;
