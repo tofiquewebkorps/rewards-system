@@ -69,10 +69,14 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void removeTransaction(Long id) {
         log.info("removeTransaction method started transaction id ::"+id);
-        TransactionDTO transactionDTO = getTransaction(id);
-        CustomerDTO customerDTO= transactionDTO.getCustomerDTO();
-        customerDTO.setTotalRewardPoints(customerDTO.getTotalRewardPoints()-transactionDTO.getRewardPoints());
-        transactionRepository.deleteById(id);
+        Transaction transaction = transactionRepository.findById(id).get();
+        Customer customer= transaction.getCustomer();
+
+        customer.setTotalRewardPoints(customer.getTotalRewardPoints()-transaction.getRewardPoints());
+        customer.getTransactions().remove(transaction);
+
+        customerRepository.save(customer);
+                transactionRepository.delete(transaction);
         log.info("removeTransaction method ended");
     }
 
