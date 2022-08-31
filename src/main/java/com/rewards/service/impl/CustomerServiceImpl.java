@@ -46,6 +46,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void removeCustomer(Long id) {
         log.info("removeCustomer method started transaction id ::"+id);
+        getCustomer(id);
         customerRepository.deleteById(id);
         log.info("removeCustomer method ended");
     }
