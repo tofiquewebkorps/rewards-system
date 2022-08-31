@@ -6,6 +6,7 @@ import com.rewards.dto.TransactionDTO;
 import com.rewards.service.CustomerService;
 import com.rewards.service.RewardsService;
 import com.rewards.service.TransactionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
+@Slf4j
 public class RewardsServiceImpl implements RewardsService {
 
     @Autowired
@@ -23,13 +25,12 @@ public class RewardsServiceImpl implements RewardsService {
 
     @Override
     public RewardsDto getRewardsMonthWise(Long id) {
+        log.info("getRewardsMonthWise started customer id ::"+id);
         HashMap<String,Long> map= new HashMap<>();
         CustomerDTO customerDTO = customerService.getCustomer(id);
         RewardsDto rewardsDto = new RewardsDto();
         rewardsDto.setCustomerName(customerDTO.getName());
         rewardsDto.setTotalRewardsPoints(customerDTO.getTotalRewardPoints());
-
-
         for(Month month:Month.values()) {
             List<TransactionDTO> transactionDTOS = customerDTO.getTransactions();
             Long monthPoint = transactionService.totalRewardsPointInMonth(transactionService.getTransactionsByCustomerAndMonths(customerDTO,month));
@@ -38,6 +39,7 @@ public class RewardsServiceImpl implements RewardsService {
             }
         }
         rewardsDto.setMonths(map);
+        log.info("getRewardsMonthWise ended");
         return rewardsDto;
     }
 }

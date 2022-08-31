@@ -26,7 +26,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO saveUpdateCustomer(CustomerDTO customerDTO) {
-        log.info("saveUpdateCustomer method started Purchase value :: "+customerDTO.getName());
+        log.info("saveUpdateCustomer method started customer name :: "+customerDTO.getName());
         Customer customer = modelMapper.map(customerDTO,Customer.class);
           Customer savedCustomer = customerRepository.saveAndFlush(customer);
           CustomerDTO savedCustomerDTO = modelMapper.map(savedCustomer,CustomerDTO.class);
