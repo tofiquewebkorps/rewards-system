@@ -2,6 +2,7 @@ package com.rewards.entity;
 
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,10 +11,10 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "transactions")
 public class Transaction {
-
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long tid;
     private Long amount;
@@ -22,4 +23,12 @@ public class Transaction {
     @JoinColumn(name = "CUSTOMER_ID",referencedColumnName = "CID")
     private Customer customer;
     private LocalDate date;
+	public Transaction(Long amount, Long rewardPoints, LocalDate string) {
+		super();
+		this.amount = amount;
+		this.rewardPoints = rewardPoints;
+		this.date = string;
+	}
+    
+    
 }
