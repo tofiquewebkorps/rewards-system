@@ -1,8 +1,6 @@
 package com.rewards.controller;
 
 import com.rewards.dto.TransactionDTO;
-import com.rewards.entity.Customer;
-import com.rewards.entity.Transaction;
 import com.rewards.reponse.ResponseHandler;
 import com.rewards.service.TransactionService;
 import lombok.extern.slf4j.Slf4j;

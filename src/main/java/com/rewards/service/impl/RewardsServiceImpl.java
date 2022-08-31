@@ -3,9 +3,6 @@ package com.rewards.service.impl;
 import com.rewards.dto.CustomerDTO;
 import com.rewards.dto.RewardsDto;
 import com.rewards.dto.TransactionDTO;
-import com.rewards.entity.Customer;
-import com.rewards.entity.Transaction;
-import com.rewards.exception.CustomerNotFoundException;
 import com.rewards.service.CustomerService;
 import com.rewards.service.RewardsService;
 import com.rewards.service.TransactionService;
@@ -15,9 +12,6 @@ import org.springframework.stereotype.Service;
 import java.time.Month;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class RewardsServiceImpl implements RewardsService {

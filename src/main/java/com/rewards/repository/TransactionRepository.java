@@ -9,9 +9,6 @@ import java.util.List;
 
 public interface TransactionRepository extends CrudRepository<Transaction,Long> {
 
-    List<Transaction> findAllByDateBetween(
-            LocalDate startDate,
-            LocalDate endDate);
     List<Transaction> findAllByCustomerAndDateBetween(Customer customer, LocalDate startDate,
                                                       LocalDate endDate);
 }

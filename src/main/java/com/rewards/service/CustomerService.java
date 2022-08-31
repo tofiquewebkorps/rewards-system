@@ -1,10 +1,6 @@
 package com.rewards.service;
 
 import com.rewards.dto.CustomerDTO;
-import com.rewards.dto.TransactionDTO;
-import com.rewards.entity.Customer;
-
-import java.time.Month;
 import java.util.List;
 
 public interface CustomerService{

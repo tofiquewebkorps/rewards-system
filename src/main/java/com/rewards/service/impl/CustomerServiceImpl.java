@@ -1,9 +1,7 @@
 package com.rewards.service.impl;
 
 import com.rewards.dto.CustomerDTO;
-import com.rewards.dto.TransactionDTO;
 import com.rewards.entity.Customer;
-import com.rewards.entity.Transaction;
 import com.rewards.exception.CustomerNotFoundException;
 import com.rewards.repository.CustomerRepository;
 import com.rewards.service.CustomerService;
@@ -12,8 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,7 +27,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO saveUpdateCustomer(CustomerDTO customerDTO) {
         log.info("saveUpdateCustomer method started Purchase value :: "+customerDTO.getName());
-//        Customer savedCustomer = customerRepository.save(customer);
         Customer customer = modelMapper.map(customerDTO,Customer.class);
           Customer savedCustomer = customerRepository.saveAndFlush(customer);
           CustomerDTO savedCustomerDTO = modelMapper.map(savedCustomer,CustomerDTO.class);
@@ -42,7 +37,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<CustomerDTO> getCustomers() {
         log.info("getCustomer method started.");
-
         List<Customer> customers = (List<Customer>) customerRepository.findAll();
         List<CustomerDTO> customerDTOS = customers.stream().map(user -> modelMapper.map(user, CustomerDTO.class)).collect(Collectors.toList());
         log.info("getCustomer method completed total customers :: "+customers.size());
@@ -66,8 +60,6 @@ public class CustomerServiceImpl implements CustomerService {
         }
         Customer customer = customerRepository.findById(id).get();
         CustomerDTO customerDTO = modelMapper.map(customer,CustomerDTO.class);
-        System.out.println("=====================================================================");
-        System.out.println("customer.getTransactions() = " + customer.getTransactions());
         log.info("getTransaction method ended");
         return customerDTO;
     }
