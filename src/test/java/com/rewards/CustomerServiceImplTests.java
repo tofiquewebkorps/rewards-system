@@ -20,24 +20,15 @@ public class CustomerServiceImplTests {
     @Autowired
     private CustomerService customerService;
 
-
-    //for this API @GetMapping("customers") -1
     @Test
-    public void getCustomersIfNotAvaiableTest() {
-        List<CustomerDTO> customers = customerService.getCustomers();
-        Assertions.assertTrue(customers.size()==0);
-    }
-
-    @Test
-    public void getCustomersIfAvaiableTest() {
+    public void getCustomersSuccessTest() {
         CustomerDTO customerDto = new CustomerDTO();
         customerDto.setName("Test1");
         CustomerDTO savedCustomer = customerService.saveUpdateCustomer(customerDto);
         List<CustomerDTO> customers = customerService.getCustomers();
-        Assertions.assertEquals("Test1",customers.get(0).getName());
+        Assertions.assertTrue(customers.size()>0);
     }
 
-    //for this API @PostMapping("customers") - 3
     @Test
     public void saveCustomerSuccessTest() {
         CustomerDTO customerDto = new CustomerDTO();
@@ -63,8 +54,6 @@ public class CustomerServiceImplTests {
         Assertions.assertThrows(NullPointerException.class, ()->customerService.saveUpdateCustomer(null)) ;
     }
 
-
-    //for this API @PutMapping("customers") - 4
     @Test
     public void updatedCustomerTransaction(){
         CustomerDTO customerDto = new CustomerDTO();
@@ -100,7 +89,6 @@ public class CustomerServiceImplTests {
         Assertions.assertThrows(CustomerNotFoundException.class, ()->customerService.getCustomer(0l)) ;
     }
 
-    //for this API @DeleteMapping("customers/{id}") - 5
     @Test
     public void removeCustomerTest() {
         CustomerDTO customerDto = new CustomerDTO();
