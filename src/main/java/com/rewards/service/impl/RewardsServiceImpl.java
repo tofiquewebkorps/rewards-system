@@ -26,9 +26,10 @@ public class RewardsServiceImpl implements RewardsService {
     @Override
     public RewardsDto getRewardsMonthWise(Long id) {
         log.info("getRewardsMonthWise started customer id ::"+id);
+        RewardsDto rewardsDto = null;
         HashMap<String,Long> map= new HashMap<>();
         CustomerDTO customerDTO = customerService.getCustomer(id);
-        RewardsDto rewardsDto = new RewardsDto();
+        rewardsDto = new RewardsDto();
         rewardsDto.setCustomerName(customerDTO.getName());
         rewardsDto.setTotalRewardsPoints(customerDTO.getTotalRewardPoints());
         for(Month month:Month.values()) {
