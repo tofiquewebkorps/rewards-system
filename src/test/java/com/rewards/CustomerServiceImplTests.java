@@ -4,6 +4,7 @@ import com.rewards.dto.CustomerDTO;
 import com.rewards.dto.TransactionDTO;
 import com.rewards.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,22 +24,51 @@ public class CustomerServiceImplTests {
 
     //for this API @GetMapping("customers") -1
     @Test
-    public void getCustomersTest() {
+    public void getCustomersIfNotAvaiableTest() {
         log.info("getAllTransaction() has been started");
         List<CustomerDTO> customers = customerService.getCustomers();
+        Assertions.assertTrue(customers.size()==0);
+        log.info("getAllTransaction() has been ended");
+    }
+
+    @Test
+    public void getCustomersIfAvaiableTest() {
+        log.info("getAllTransaction() has been started");
+        customerDto.setName("Test1");
+        CustomerDTO savedCustomer = customerService.saveUpdateCustomer(customerDto);
+        List<CustomerDTO> customers = customerService.getCustomers();
+        Assertions.assertEquals(customers.get(0).getName(),"Test1");
         log.info("getAllTransaction() has been ended");
     }
 
     //for this API @PostMapping("customers") - 3
     @Test
-    public void saveCustomerTest() {
+    public void saveCustomerSuccessTest() {
         log.info("saveCustomerTransaction()-> has been started");
-        customerDto.setName("test1"); customerDto.setTotalRewardPoints(0l);
+        customerDto.setName("test1");
         List<TransactionDTO> transactionList = new ArrayList<TransactionDTO>();
         transactionList.add(new TransactionDTO(120l,0l, LocalDate.of(2022, 01, 02)));
         transactionList.add(new TransactionDTO(125l,0l,LocalDate.of(2022, 01, 03)));
         customerDto.setTransactions(transactionList);
         CustomerDTO cust = customerService.saveUpdateCustomer(customerDto);
+        Assertions.assertNotNull(cust);
+        Assertions.assertNotNull(cust.getCid());
+        Assertions.assertEquals(cust.getName(),"test1");
+        log.info("saveCustomerTransaction()-> Customer Object :- "+cust.toString());
+        log.info("saveCustomerTransaction()-> has been ended");
+    }
+
+    public void saveCustomerFailerTest() {
+        log.info("saveCustomerTransaction()-> has been started");
+        customerDto.setName("test1");
+        List<TransactionDTO> transactionList = new ArrayList<TransactionDTO>();
+        transactionList.add(new TransactionDTO(120l,0l, LocalDate.of(2022, 01, 02)));
+        transactionList.add(new TransactionDTO(125l,0l,LocalDate.of(2022, 01, 03)));
+        customerDto.setTransactions(transactionList);
+        CustomerDTO cust = customerService.saveUpdateCustomer(customerDto);
+        Assertions.assertNotNull(cust);
+        Assertions.assertNotNull(cust.getCid());
+        Assertions.assertEquals(cust.getName(),"test1");
         log.info("saveCustomerTransaction()-> Customer Object :- "+cust.toString());
         log.info("saveCustomerTransaction()-> has been ended");
     }
