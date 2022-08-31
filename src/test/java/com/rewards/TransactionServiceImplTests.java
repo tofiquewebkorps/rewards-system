@@ -24,11 +24,9 @@ public class TransactionServiceImplTests {
 
     @Test
     public void getAllTransactionTest() {
-        log.info("getAllTransaction() has been started");
         List<TransactionDTO> transactions = transactionService.getTransactions();
         Assertions.assertNotNull(transactions);
         Assertions.assertTrue(!transactions.isEmpty());
-        log.info("getAllTransaction() has been ended");
     }
 
     @Test
