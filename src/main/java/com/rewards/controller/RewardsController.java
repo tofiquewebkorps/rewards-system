@@ -23,6 +23,7 @@ public class  RewardsController {
         log.info("getRewardsDetails started customer id ::"+id);
         try {
             RewardsDto rewardsDto = rewardsService.getRewardsMonthWise(id);
+            log.info("getRewardsDetails rewards details retive successfully");
             return ResponseHandler.generateResponse("success", HttpStatus.OK, rewardsDto);
         }catch (Exception e) {
             log.error("Exception occured in getRewardsDetails ::"+ e.getMessage());

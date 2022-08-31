@@ -69,7 +69,11 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void removeTransaction(Long id) {
         log.info("removeTransaction method started transaction id ::"+id);
-        Transaction transaction = transactionRepository.findById(id).get();
+        Optional<Transaction> transactionOptional = transactionRepository.findById(id);
+        if(transactionOptional.isEmpty()){
+            throw new TransactionNotFoundException("Transaction not found with id ::"+id);
+        }
+        Transaction transaction = transactionOptional.get();
         Customer customer= transaction.getCustomer();
 
         customer.setTotalRewardPoints(customer.getTotalRewardPoints()-transaction.getRewardPoints());

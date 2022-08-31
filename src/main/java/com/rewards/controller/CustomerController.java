@@ -35,6 +35,7 @@ public class CustomerController {
         log.info("getCustomer started id ::"+id);
         try {
             CustomerDTO customerDTO = customerService.getCustomer(id);
+            log.info("getCustomer retrive successfully with id ::"+id);
             return ResponseHandler.generateResponse("success", HttpStatus.OK, customerDTO);
         }catch (Exception e) {
             log.error("Exception occured in getCustomer ::"+ e.getMessage());
@@ -47,6 +48,7 @@ public class CustomerController {
         log.info("addCustomer started");
         try {
             CustomerDTO savedCustomerDTO = customerService.saveUpdateCustomer(customerDTO);
+            log.info("addCustomer customer added successfully with id ::"+savedCustomerDTO.getCid());
             return ResponseHandler.generateResponse("Customer Signup Done", HttpStatus.OK, savedCustomerDTO);
         }catch (Exception e) {
             log.error("Exception occured in addCustomer ::"+ e.getMessage());
@@ -59,6 +61,7 @@ public class CustomerController {
         log.info("updateCustomer started customer id ::"+customerDTO.getCid());
         try {
             CustomerDTO updateCustomer = customerService.saveUpdateCustomer(customerDTO);
+            log.info("updateCustomer customer updated successfully with id ::"+updateCustomer.getCid());
             return ResponseHandler.generateResponse("", HttpStatus.OK, updateCustomer);
         }catch (Exception e) {
             log.error("Exception occured in updateCustomer ::"+ e.getMessage());
@@ -71,6 +74,7 @@ public class CustomerController {
         log.info("deleteCustomer started customer id ::"+id);
         try {
             customerService.removeCustomer(id);
+            log.info("deleteCustomer customer deleted successfully with id ::"+id);
             return ResponseHandler.generateResponse("Customer Deleted Successfully", HttpStatus.OK, null);
         }catch (Exception e) {
             log.error("Exception occured in deleteCustomer ::"+ e.getMessage());
