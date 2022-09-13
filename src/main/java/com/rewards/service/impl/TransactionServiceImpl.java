@@ -1,12 +1,12 @@
 package com.rewards.service.impl;
 
-import com.rewards.dto.CustomerDTO;
+import com.rewards.dto.UserDTO;
 import com.rewards.dto.TransactionDTO;
-import com.rewards.entity.Customer;
+import com.rewards.entity.User;
 import com.rewards.entity.Transaction;
-import com.rewards.exception.CustomerNotFoundException;
+import com.rewards.exception.UserNotFoundException;
 import com.rewards.exception.TransactionNotFoundException;
-import com.rewards.repository.CustomerRepository;
+import com.rewards.repository.UserRepository;
 import com.rewards.repository.TransactionRepository;
 import com.rewards.service.RewardsService;
 import com.rewards.service.TransactionService;
@@ -29,7 +29,7 @@ public class TransactionServiceImpl implements TransactionService {
     private TransactionRepository transactionRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -38,19 +38,19 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDTO saveUpdateTransaction(TransactionDTO transactionDTO){
         log.info("saveUpdateTransaction method started Purchase value :: "+transactionDTO.getAmount());
 
-        CustomerDTO customerDTO = transactionDTO.getCustomerDTO();
-        if(customerDTO==null){
-            throw new CustomerNotFoundException("Without Customer Transaction would not Happen");
+        UserDTO userDTO = transactionDTO.getUserDTO();
+        if(userDTO ==null){
+            throw new UserNotFoundException("Without Customer Transaction would not Happen");
         }
-        Optional<Customer> existCustomerOptional = customerRepository.findById(customerDTO.getCid());
+        Optional<User> existCustomerOptional = userRepository.findById(userDTO.getUid());
         if(existCustomerOptional.isEmpty()){
-            throw new CustomerNotFoundException("Customer Not Exist");
+            throw new UserNotFoundException("Customer Not Exist");
         }
         transactionDTO.setRewardPoints(RewardsService.calculateRewardsPoint(transactionDTO.getAmount()));
-        Customer existCustomer = existCustomerOptional.get();
-        existCustomer.setTotalRewardPoints(existCustomer.getTotalRewardPoints()+transactionDTO.getRewardPoints());
-        CustomerDTO existCustomerDto = modelMapper.map(existCustomer,CustomerDTO.class);
-        transactionDTO.setCustomerDTO(existCustomerDto);
+        User existUser = existCustomerOptional.get();
+        existUser.setTotalRewardPoints(existUser.getTotalRewardPoints()+transactionDTO.getRewardPoints());
+        UserDTO existUserDto = modelMapper.map(existUser, UserDTO.class);
+        transactionDTO.setUserDTO(existUserDto);
         Transaction transaction= modelMapper.map(transactionDTO,Transaction.class);
         Transaction savedTransaction = transactionRepository.save(transaction);
         TransactionDTO savedTransactionDto= modelMapper.map(savedTransaction,TransactionDTO.class);
@@ -75,12 +75,12 @@ public class TransactionServiceImpl implements TransactionService {
             throw new TransactionNotFoundException("Transaction not found with id ::"+id);
         }
         Transaction transaction = transactionOptional.get();
-        Customer customer= transaction.getCustomer();
+        User user = transaction.getUser();
 
-        customer.setTotalRewardPoints(customer.getTotalRewardPoints()-transaction.getRewardPoints());
-        customer.getTransactions().remove(transaction);
+        user.setTotalRewardPoints(user.getTotalRewardPoints()-transaction.getRewardPoints());
+        user.getTransactions().remove(transaction);
 
-        customerRepository.save(customer);
+        userRepository.save(user);
                 transactionRepository.delete(transaction);
         log.info("removeTransaction method ended");
     }
@@ -99,14 +99,14 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionDTO> getTransactionsByCustomerAndMonths(CustomerDTO customerDTO, Month month) {
+    public List<TransactionDTO> getTransactionsByCustomerAndMonths(UserDTO userDTO, Month month) {
         log.info("getTransactionsByMonths method started MONTH ::"+month);
         LocalDate startDate = LocalDate.of(2022, month,1);
         LocalDate endDate = LocalDate.of(2022,month, startDate.withDayOfMonth(
                 startDate.getMonth().length(startDate.isLeapYear())).getDayOfMonth());
-        Customer customer = modelMapper.map(customerDTO,Customer.class);
-        List<Transaction> transactions = (List<Transaction>) transactionRepository.findAllByCustomerAndDateBetween(customer,startDate,endDate);
-        List<TransactionDTO> transactionDTOS = transactions.stream().map(user -> modelMapper.map(user, TransactionDTO.class)).collect(Collectors.toList());
+        User user = modelMapper.map(userDTO, User.class);
+        List<Transaction> transactions = (List<Transaction>) transactionRepository.findAllByCustomerAndDateBetween(user,startDate,endDate);
+        List<TransactionDTO> transactionDTOS = transactions.stream().map(transaction -> modelMapper.map(transaction, TransactionDTO.class)).collect(Collectors.toList());
         log.info("getTransactionsByMonths method completed total transactions :: "+transactions.size());
         return transactionDTOS;
 

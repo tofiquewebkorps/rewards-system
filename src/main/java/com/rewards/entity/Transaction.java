@@ -19,9 +19,9 @@ public class Transaction {
     private Long tid;
     private Long amount;
     private Long rewardPoints;
-    @ManyToOne(targetEntity = Customer.class,cascade = CascadeType.MERGE)
-    @JoinColumn(name = "CUSTOMER_ID",referencedColumnName = "CID")
-    private Customer customer;
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "USER_ID",referencedColumnName = "UID")
+    private User user;
     private LocalDate date;
 	public Transaction(Long amount, Long rewardPoints, LocalDate string) {
 		super();

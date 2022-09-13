@@ -10,17 +10,17 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
-@Table(name = "customers")
-public class Customer {
+@Table(name = "User")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long cid;
+    private Long uid;
 
     private String name;
 
-    @OneToMany(targetEntity = Transaction.class,cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name = "CUSTOMER_ID",referencedColumnName = "CID")
+    @OneToMany(targetEntity = Transaction.class,fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID",referencedColumnName = "UID")
     private Set<Transaction> transactions;
 
     private Long totalRewardPoints = 0l;

@@ -1,6 +1,6 @@
 package com.rewards;
 
-import com.rewards.dto.CustomerDTO;
+import com.rewards.dto.UserDTO;
 import com.rewards.dto.RewardsDto;
 import com.rewards.dto.TransactionDTO;
 import com.rewards.service.RewardsService;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.rewards.service.CustomerService;
+import com.rewards.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 public class RewardsServiceImplTest {
 
-	 @Autowired private CustomerService customerService;
+	 @Autowired private UserService userService;
 
 	 @Autowired private TransactionService transactionService;
 
@@ -30,13 +30,13 @@ public class RewardsServiceImplTest {
 	 @Test
 	 public void getRewardPointsMonthWise() {
 		 TransactionDTO transactionDto = new TransactionDTO();
-		 CustomerDTO  customerDto = new CustomerDTO();
-		 customerDto.setName("test1");
-		 CustomerDTO customerDTO= customerService.saveUpdateCustomer(customerDto);
+		 UserDTO userDto = new UserDTO();
+		 userDto.setName("test1");
+		 UserDTO userDTO = userService.saveUpdateUser(userDto);
 		 transactionDto.setAmount(170l); transactionDto.setDate(LocalDate.of(2022, 01, 025));
-		 transactionDto.setCustomerDTO(customerDTO);
+		 transactionDto.setUserDTO(userDTO);
 		 TransactionDTO savedTransactionDTO = transactionService.saveUpdateTransaction(transactionDto);
-		 RewardsDto rewardsDto = rewardsService.getRewardsMonthWise(customerDTO.getCid());
+		 RewardsDto rewardsDto = rewardsService.getRewardsMonthWise(userDTO.getUid());
 		 Assertions.assertNotNull(rewardsDto);
 		 Assertions.assertTrue(rewardsDto.getMonths().size()>0);
 		 Assertions.assertNotNull(rewardsDto.getMonths());
@@ -53,14 +53,14 @@ public class RewardsServiceImplTest {
 	public void totalRewardsPointInMonthTest(){
 		TransactionDTO transactionDto1 = new TransactionDTO();
 		TransactionDTO transactionDto2 = new TransactionDTO();
-		CustomerDTO  customerDto = new CustomerDTO();
-		customerDto.setName("test1");
-		CustomerDTO customerDTO= customerService.saveUpdateCustomer(customerDto);
+		UserDTO userDto = new UserDTO();
+		userDto.setName("test1");
+		UserDTO userDTO = userService.saveUpdateUser(userDto);
 		transactionDto1.setAmount(120l); transactionDto1.setDate(LocalDate.of(2022, 01, 025));
-		transactionDto1.setCustomerDTO(customerDTO);
+		transactionDto1.setUserDTO(userDTO);
 		TransactionDTO savedTransactionDTO1 = transactionService.saveUpdateTransaction(transactionDto1);
 		transactionDto2.setAmount(70l); transactionDto1.setDate(LocalDate.of(2022, 02, 025));
-		transactionDto2.setCustomerDTO(customerDTO);
+		transactionDto2.setUserDTO(userDTO);
 		TransactionDTO savedTransactionDTO2 = transactionService.saveUpdateTransaction(transactionDto2);
 
 		Assertions.assertEquals(110,rewardsService.totalRewardsPointInMonth(List.of(savedTransactionDTO1,savedTransactionDTO2)));

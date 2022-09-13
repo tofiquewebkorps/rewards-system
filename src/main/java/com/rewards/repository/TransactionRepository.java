@@ -1,6 +1,6 @@
 package com.rewards.repository;
 
-import com.rewards.entity.Customer;
+import com.rewards.entity.User;
 import com.rewards.entity.Transaction;
 import org.springframework.data.repository.CrudRepository;
 
@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface TransactionRepository extends CrudRepository<Transaction,Long> {
 
-    List<Transaction> findAllByCustomerAndDateBetween(Customer customer, LocalDate startDate,
+    List<Transaction> findAllByCustomerAndDateBetween(User user, LocalDate startDate,
                                                       LocalDate endDate);
 }

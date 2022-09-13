@@ -7,10 +7,10 @@ import java.util.List;
 
 @Getter
 @Setter
-public class CustomerDTO {
+public class UserDTO {
 
 
-    private Long cid;
+    private Long uid;
 
     private String name;
 

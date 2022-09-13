@@ -14,7 +14,7 @@ public class TransactionDTO {
     private Long tid;
     private Long amount;
     private Long rewardPoints;
-    private CustomerDTO customerDTO;
+    private UserDTO userDTO;
     private LocalDate date;
 	public TransactionDTO(Long amount, Long rewardPoints, LocalDate date) {
 		super();

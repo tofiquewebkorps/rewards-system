@@ -1,9 +1,9 @@
 package com.rewards.service.impl;
 
-import com.rewards.dto.CustomerDTO;
+import com.rewards.dto.UserDTO;
 import com.rewards.dto.RewardsDto;
 import com.rewards.dto.TransactionDTO;
-import com.rewards.service.CustomerService;
+import com.rewards.service.UserService;
 import com.rewards.service.RewardsService;
 import com.rewards.service.TransactionService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.Month;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -22,20 +21,20 @@ public class RewardsServiceImpl implements RewardsService {
     @Autowired
     private TransactionService transactionService;
     @Autowired
-    private CustomerService customerService;
+    private UserService userService;
 
     @Override
     public RewardsDto getRewardsMonthWise(Long id) {
         log.info("getRewardsMonthWise started customer id ::"+id);
         RewardsDto rewardsDto = null;
         HashMap<String,Long> map= new HashMap<>();
-        CustomerDTO customerDTO = customerService.getCustomerDetailsById(id);
+        UserDTO userDTO = userService.getUserDetailsById(id);
         rewardsDto = new RewardsDto();
-        rewardsDto.setCustomerName(customerDTO.getName());
-        rewardsDto.setTotalRewardsPoints(customerDTO.getTotalRewardPoints());
+        rewardsDto.setCustomerName(userDTO.getName());
+        rewardsDto.setTotalRewardsPoints(userDTO.getTotalRewardPoints());
         for(Month month:Month.values()) {
-            List<TransactionDTO> transactionDTOS = customerDTO.getTransactions();
-            Long monthPoint = totalRewardsPointInMonth(transactionService.getTransactionsByCustomerAndMonths(customerDTO,month));
+            List<TransactionDTO> transactionDTOS = userDTO.getTransactions();
+            Long monthPoint = totalRewardsPointInMonth(transactionService.getTransactionsByCustomerAndMonths(userDTO,month));
             if(monthPoint>0){
                 map.put(month.name(),monthPoint);
             }

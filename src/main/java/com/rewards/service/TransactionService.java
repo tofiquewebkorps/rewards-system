@@ -1,6 +1,6 @@
 package com.rewards.service;
 
-import com.rewards.dto.CustomerDTO;
+import com.rewards.dto.UserDTO;
 import com.rewards.dto.TransactionDTO;
 
 import java.time.Month;
@@ -17,5 +17,5 @@ public interface TransactionService {
 
     TransactionDTO getTransaction(Long id);
 
-    List<TransactionDTO> getTransactionsByCustomerAndMonths(CustomerDTO customerDTO, Month month);
+    List<TransactionDTO> getTransactionsByCustomerAndMonths(UserDTO userDTO, Month month);
 }
