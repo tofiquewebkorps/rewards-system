@@ -105,7 +105,7 @@ public class TransactionServiceImpl implements TransactionService {
         LocalDate endDate = LocalDate.of(2022,month, startDate.withDayOfMonth(
                 startDate.getMonth().length(startDate.isLeapYear())).getDayOfMonth());
         User user = modelMapper.map(userDTO, User.class);
-        List<Transaction> transactions = (List<Transaction>) transactionRepository.findAllByCustomerAndDateBetween(user,startDate,endDate);
+        List<Transaction> transactions = (List<Transaction>) transactionRepository.findAllByUserAndDateBetween(user,startDate,endDate);
         List<TransactionDTO> transactionDTOS = transactions.stream().map(transaction -> modelMapper.map(transaction, TransactionDTO.class)).collect(Collectors.toList());
         log.info("getTransactionsByMonths method completed total transactions :: "+transactions.size());
         return transactionDTOS;
