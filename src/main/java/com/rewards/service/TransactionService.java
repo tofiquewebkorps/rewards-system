@@ -17,8 +17,5 @@ public interface TransactionService {
 
     TransactionDTO getTransaction(Long id);
 
-
-    Long totalRewardsPointInMonth(List<TransactionDTO> transactionDTOS);
-
     List<TransactionDTO> getTransactionsByCustomerAndMonths(CustomerDTO customerDTO, Month month);
 }

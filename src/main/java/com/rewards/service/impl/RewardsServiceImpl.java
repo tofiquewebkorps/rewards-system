@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.Month;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -28,13 +29,13 @@ public class RewardsServiceImpl implements RewardsService {
         log.info("getRewardsMonthWise started customer id ::"+id);
         RewardsDto rewardsDto = null;
         HashMap<String,Long> map= new HashMap<>();
-        CustomerDTO customerDTO = customerService.getCustomer(id);
+        CustomerDTO customerDTO = customerService.getCustomerDetailsById(id);
         rewardsDto = new RewardsDto();
         rewardsDto.setCustomerName(customerDTO.getName());
         rewardsDto.setTotalRewardsPoints(customerDTO.getTotalRewardPoints());
         for(Month month:Month.values()) {
             List<TransactionDTO> transactionDTOS = customerDTO.getTransactions();
-            Long monthPoint = transactionService.totalRewardsPointInMonth(transactionService.getTransactionsByCustomerAndMonths(customerDTO,month));
+            Long monthPoint = totalRewardsPointInMonth(transactionService.getTransactionsByCustomerAndMonths(customerDTO,month));
             if(monthPoint>0){
                 map.put(month.name(),monthPoint);
             }
@@ -42,5 +43,15 @@ public class RewardsServiceImpl implements RewardsService {
         rewardsDto.setMonths(map);
         log.info("getRewardsMonthWise ended");
         return rewardsDto;
+    }
+
+    public Long totalRewardsPointInMonth(List<TransactionDTO> transactionDTOS){
+        log.info("totalRewardsPointInMonth method started total transactions :: "+transactionDTOS.size());
+        Long totalReward = 0l;
+        for(TransactionDTO transactionDTO : transactionDTOS){
+            totalReward = totalReward + transactionDTO.getRewardPoints();
+        }
+        log.info("totalRewardsPointInMonth method ended total Reward :: "+totalReward);
+        return totalReward;
     }
 }

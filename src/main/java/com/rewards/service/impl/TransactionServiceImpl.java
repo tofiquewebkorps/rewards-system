@@ -8,6 +8,7 @@ import com.rewards.exception.CustomerNotFoundException;
 import com.rewards.exception.TransactionNotFoundException;
 import com.rewards.repository.CustomerRepository;
 import com.rewards.repository.TransactionRepository;
+import com.rewards.service.RewardsService;
 import com.rewards.service.TransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -45,7 +46,7 @@ public class TransactionServiceImpl implements TransactionService {
         if(existCustomerOptional.isEmpty()){
             throw new CustomerNotFoundException("Customer Not Exist");
         }
-        transactionDTO.setRewardPoints(calculateRewardsPoint(transactionDTO.getAmount()));
+        transactionDTO.setRewardPoints(RewardsService.calculateRewardsPoint(transactionDTO.getAmount()));
         Customer existCustomer = existCustomerOptional.get();
         existCustomer.setTotalRewardPoints(existCustomer.getTotalRewardPoints()+transactionDTO.getRewardPoints());
         CustomerDTO existCustomerDto = modelMapper.map(existCustomer,CustomerDTO.class);
@@ -95,33 +96,6 @@ public class TransactionServiceImpl implements TransactionService {
         TransactionDTO transactionDTO = modelMapper.map(transactionOptional.get(),TransactionDTO.class);
         log.info("getTransaction method ended");
         return transactionDTO;
-    }
-
-
-
-    public Long totalRewardsPointInMonth(List<TransactionDTO> transactionDTOS){
-        log.info("totalRewardsPointInMonth method started total transactions :: "+transactionDTOS.size());
-        Long totalReward = 0l;
-        for(TransactionDTO transactionDTO : transactionDTOS){
-            totalReward = totalReward + transactionDTO.getRewardPoints();
-        }
-        log.info("totalRewardsPointInMonth method ended total Reward :: "+totalReward);
-        return totalReward;
-    }
-
-    private static Long calculateRewardsPoint(Long amount){
-        log.info("calculateRewardsPoint method started purchase amount ::"+amount);
-        Long rewardsPoint = 0l;
-        amount = amount-50;
-        if(amount>0){
-            if(amount/50<1) {
-                rewardsPoint = amount;
-            }else{
-                rewardsPoint = 50 + ((amount-50)*2);
-            }
-        }
-        log.info("calculateRewardsPoint method ended reward point ::"+rewardsPoint);
-        return rewardsPoint;
     }
 
     @Override

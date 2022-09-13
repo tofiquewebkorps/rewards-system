@@ -44,22 +44,22 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void removeCustomer(Long id) {
+    public void removeCustomerDetailsById(Long id) {
         log.info("removeCustomer method started transaction id ::"+id);
-        getCustomer(id);
+        getCustomerDetailsById(id);
         customerRepository.deleteById(id);
         log.info("removeCustomer method ended");
     }
 
     @Override
-    public CustomerDTO getCustomer(Long id) {
+    public CustomerDTO getCustomerDetailsById(Long id) {
         log.info("getTransaction method started transaction id ::"+id);
         Optional<Customer> customerOptional = customerRepository.findById(id);
         if(customerOptional.isEmpty()){
             log.error("getCustomer Customer not found with id ::"+id);
             throw new CustomerNotFoundException("Customer not found with id ::"+id);
         }
-        Customer customer = customerRepository.findById(id).get();
+        Customer customer = customerOptional.get();
         CustomerDTO customerDTO = modelMapper.map(customer,CustomerDTO.class);
         log.info("getTransaction method ended");
         return customerDTO;

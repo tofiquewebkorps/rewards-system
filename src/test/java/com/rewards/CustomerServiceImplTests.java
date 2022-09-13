@@ -4,7 +4,6 @@ import com.rewards.dto.CustomerDTO;
 import com.rewards.dto.TransactionDTO;
 import com.rewards.exception.CustomerNotFoundException;
 import com.rewards.service.CustomerService;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +75,7 @@ public class CustomerServiceImplTests {
 
         CustomerDTO customerDto = new CustomerDTO();
         CustomerDTO cust = customerService.saveUpdateCustomer(customerDto);
-        CustomerDTO customer = customerService.getCustomer(cust.getCid());
+        CustomerDTO customer = customerService.getCustomerDetailsById(cust.getCid());
         Assertions.assertEquals(cust.getCid(),customer.getCid());
         Assertions.assertNotNull(customer);
 
@@ -86,7 +85,7 @@ public class CustomerServiceImplTests {
     public void getCustomerByIdFailerTest() {
 
         CustomerDTO customerDto = new CustomerDTO();
-        Assertions.assertThrows(CustomerNotFoundException.class, ()->customerService.getCustomer(0l)) ;
+        Assertions.assertThrows(CustomerNotFoundException.class, ()->customerService.getCustomerDetailsById(0l)) ;
     }
 
     @Test
@@ -95,8 +94,8 @@ public class CustomerServiceImplTests {
         customerDto.setName("test1");
         CustomerDTO cust = customerService.saveUpdateCustomer(customerDto);
 
-        customerService.removeCustomer(cust.getCid());
-        Assertions.assertThrows(CustomerNotFoundException.class, ()->customerService.getCustomer(cust.getCid())) ;
+        customerService.removeCustomerDetailsById(cust.getCid());
+        Assertions.assertThrows(CustomerNotFoundException.class, ()->customerService.getCustomerDetailsById(cust.getCid())) ;
     }
 
 }

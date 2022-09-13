@@ -34,7 +34,7 @@ public class CustomerController {
     public ResponseEntity<Object> getCustomer(@PathVariable Long id){
         log.info("getCustomer started id ::"+id);
         try {
-            CustomerDTO customerDTO = customerService.getCustomer(id);
+            CustomerDTO customerDTO = customerService.getCustomerDetailsById(id);
             log.info("getCustomer retrive successfully with id ::"+id);
             return ResponseHandler.generateResponse("success", HttpStatus.OK, customerDTO);
         }catch (Exception e) {
@@ -73,7 +73,7 @@ public class CustomerController {
     public ResponseEntity<Object> deleteCustomer(@PathVariable Long id){
         log.info("deleteCustomer started customer id ::"+id);
         try {
-            customerService.removeCustomer(id);
+            customerService.removeCustomerDetailsById(id);
             log.info("deleteCustomer customer deleted successfully with id ::"+id);
             return ResponseHandler.generateResponse("Customer Deleted Successfully", HttpStatus.OK, null);
         }catch (Exception e) {
