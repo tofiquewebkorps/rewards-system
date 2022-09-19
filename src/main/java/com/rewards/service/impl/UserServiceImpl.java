@@ -8,6 +8,8 @@ import com.rewards.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "users")
     public List<UserDTO> getUsers() {
         log.info("getUsers method started.");
         List<User> users = (List<User>) userRepository.findAll();
@@ -44,14 +47,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "users", allEntries = true)
     public void removeUserDetailsById(Long id) {
         log.info("removeUserDetailsById method started transaction id ::"+id);
-        removeUserDetailsById(id);
         userRepository.deleteById(id);
         log.info("removeUserDetailsById method ended");
     }
 
     @Override
+    @Cacheable(value = "users", key = "#id")
     public UserDTO getUserDetailsById(Long id) {
         log.info("getUserDetailsById:: method started transaction id ::"+id);
         Optional<User> userOptional = userRepository.findById(id);

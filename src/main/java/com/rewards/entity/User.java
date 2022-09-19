@@ -19,9 +19,9 @@ public class User {
 
     private String name;
 
-    @OneToMany(targetEntity = Transaction.class,fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Transaction.class,fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "USER_ID",referencedColumnName = "UID")
-    private Set<Transaction> transactions;
+    private List<Transaction> transactions;
 
     private Long totalRewardPoints = 0l;
 

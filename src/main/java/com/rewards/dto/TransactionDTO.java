@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Setter
 @Getter
 @NoArgsConstructor
-public class TransactionDTO {
+public class TransactionDTO implements Serializable {
 
     private Long tid;
     private Long amount;
